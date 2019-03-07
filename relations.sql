@@ -5,8 +5,8 @@ CREATE TABLE Host
   name VARCHAR(100) NOT NULL,
   since DATE NOT NULL,
   about VARCHAR(1000) NOT NULL,
-  response_time VARCHAR(30) NOT NULL,
-  response_rate FLOAT NOT NULL,
+  response_time VARCHAR(30),
+  response_rate FLOAT,
   thumbnail_url VARCHAR(100) NOT NULL,
   picture_url VARCHAR(100) NOT NULL,
   neighbourhood VARCHAR(300) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE Reviews
     lid INT NOT NULL,
     rid INT NOT NULL,
     date DATE NOT NULL,
-    comments VARCHAR(100) NOT NULL,
+    comments VARCHAR(500) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (lid) REFERENCES Listing,
     FOREIGN KEY (rid) REFERENCES Reviewer
@@ -36,12 +36,11 @@ CREATE TABLE Reviewer
 CREATE TABLE Calendar
 (
   date DATE,
-  lid INT NOT NULL,
+  lid INT,
   available BIT NOT NULL,
   price FLOAT NOT NULL,
   PRIMARY KEY (date, lid),
-  FOREIGN KEY (lid) REFERENCES Listing,
-  ON DELETE CASCADE
+  FOREIGN KEY (lid) REFERENCES Listing ON DELETE CASCADE
 );
 
 CREATE TABLE Listing
@@ -87,14 +86,14 @@ CREATE TABLE Listing
   cancellation_policy VARCHAR(50) NOT NULL,
   require_guest_profile_picture BIT NOT NULL,
   require_guest_phone_verification BIT NOT NULL,
-  review_scores_rating INT NOT NULL,
-  review_scores_accuracy INT NOT NULL,
-  review_scores_cleanliness INT NOT NULL,
-  review_scores_checkin INT NOT NULL,
-  review_scores_communication INT NOT NULL,
-  review_scores_location INT NOT NULL,
-  review_scores_value INT NOT NULL,
+  review_scores_rating INT,
+  review_scores_accuracy INT,
+  review_scores_cleanliness INT,
+  review_scores_checkin INT,
+  review_scores_communication INT,
+  review_scores_location INT,
+  review_scores_value INT,
   hid INT NOT NULL,
   PRIMARY KEY (lid),
-  FOREIGN KEY (hid) REFERENCES Host
+  FOREIGN KEY (hid) REFERENCES Host ON DELETE CASCADE
 );
