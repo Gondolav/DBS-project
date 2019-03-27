@@ -16,10 +16,10 @@ CREATE TABLE Host
 
 CREATE TABLE Reviews
 (
-    id INT,
     lid INT NOT NULL,
-    rid INT NOT NULL,
+    id INT,
     rdate DATE NOT NULL,
+    rid INT NOT NULL,
     comments VARCHAR(500) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (lid) REFERENCES Listing,
@@ -82,10 +82,6 @@ CREATE TABLE Listing
   extra_people FLOAT NOT NULL,
   minimum_nights INT NOT NULL,
   maximum_nights INT NOT NULL,
-  is_business_travel_ready CHAR(1) NOT NULL,
-  cancellation_policy VARCHAR(50) NOT NULL,
-  require_guest_profile_picture CHAR(1) NOT NULL,
-  require_guest_phone_verification CHAR(1) NOT NULL,
   review_scores_rating INT,
   review_scores_accuracy INT,
   review_scores_cleanliness INT,
@@ -93,6 +89,10 @@ CREATE TABLE Listing
   review_scores_communication INT,
   review_scores_location INT,
   review_scores_value INT,
+  is_business_travel_ready CHAR(1) NOT NULL,
+  cancellation_policy VARCHAR(50) NOT NULL,
+  require_guest_profile_picture CHAR(1) NOT NULL,
+  require_guest_phone_verification CHAR(1) NOT NULL,
   hid INT NOT NULL,
   PRIMARY KEY (lid),
   FOREIGN KEY (hid) REFERENCES Host ON DELETE CASCADE
