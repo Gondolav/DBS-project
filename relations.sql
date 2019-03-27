@@ -19,7 +19,7 @@ CREATE TABLE Reviews
     id INT,
     lid INT NOT NULL,
     rid INT NOT NULL,
-    date DATE NOT NULL,
+    rdate DATE NOT NULL,
     comments VARCHAR(500) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (lid) REFERENCES Listing,
@@ -35,11 +35,11 @@ CREATE TABLE Reviewer
 
 CREATE TABLE Calendar
 (
-  date DATE,
   lid INT,
-  available BIT NOT NULL,
+  cdate DATE,
+  available CHAR(1) NOT NULL,
   price FLOAT NOT NULL,
-  PRIMARY KEY (date, lid),
+  PRIMARY KEY (cdate, lid),
   FOREIGN KEY (lid) REFERENCES Listing ON DELETE CASCADE
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE Listing
   neighbourhood_overview VARCHAR(1000) NOT NULL,
   notes VARCHAR(1000) NOT NULL,
   transit VARCHAR(1000) NOT NULL,
-  access VARCHAR(1000) NOT NULL,
+  laccess VARCHAR(1000) NOT NULL,
   interaction VARCHAR(1000) NOT NULL,
   house_rules VARCHAR(1000) NOT NULL,
   picture_url VARCHAR(100) NOT NULL,
@@ -82,10 +82,10 @@ CREATE TABLE Listing
   extra_people FLOAT NOT NULL,
   minimum_nights INT NOT NULL,
   maximum_nights INT NOT NULL,
-  is_business_travel_ready BIT NOT NULL,
+  is_business_travel_ready CHAR(1) NOT NULL,
   cancellation_policy VARCHAR(50) NOT NULL,
-  require_guest_profile_picture BIT NOT NULL,
-  require_guest_phone_verification BIT NOT NULL,
+  require_guest_profile_picture CHAR(1) NOT NULL,
+  require_guest_phone_verification CHAR(1) NOT NULL,
   review_scores_rating INT,
   review_scores_accuracy INT,
   review_scores_cleanliness INT,
