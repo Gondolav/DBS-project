@@ -3,8 +3,8 @@ FROM Listing L
 WHERE L.bedrooms = 8
 
 SELECT AVG(L.review_scores_cleanliness)
-FROM Listing L
-WHERE L.amenities LIKE '%TV%'
+FROM Listing L, Amenities A, Has_amen H
+WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities LIKE '%TV%'
 
 SELECT H.url
 FROM Host H, Listing L, Calendar C
@@ -23,17 +23,17 @@ FROM Host H
 WHERE 1 = (SELECT COUNT(*) FROM Listing L WHERE H.hid = L.hid)
 
 SELECT AVG(L1.price) - AVG(L2.price) AS Difference
-FROM Listing L1, Listing L2
-WHERE L1.amenities LIKE '%Wifi%' AND L2.amenities NOT LIKE '%Wifi%'
+FROM Listing L1, Listing L2, Amenities A1, Amenities A2, Has_amen H1, Has_amen H2
+WHERE L1.lid = H1.lid AND H1.aid = A1.aid AND A1.amenities LIKE '%Wifi%' AND L2.lid = H2.lid AND H2.aid = A2.aid AND A2.amenities NOT LIKE '%Wifi%'
 
 SELECT AVG(L1.price) - AVG(L2.price) AS BerlinMinusMadrid
-FROM Listing L1, Listing L2
-WHERE L1.beds = 8 AND L2.beds = 8 AND L1.city = "Berlin" AND L2.city = "Madrid"
+FROM Listing L1, Listing L2, City C1, City C2, Offered_in_city O1, Offered_in_city O2
+WHERE L1.beds = 8 AND L2.beds = 8 AND L1.lid = O1.lid AND L2.lid = O2.lid AND O1.ciid = C1.ciid AND C1.city = "Berlin" AND O2.ciid = C2.ciid AND C2.city = "Madrid"
 
 SELECT H.hid, H.name
 FROM Host H, Listing L
+WHERE H.hid = L.hid AND L.country_code = "ES"
 GROUP BY H.hid
-HAVING H.hid = L.hid AND L.country_code = "ES"
 ORDER BY COUNT(*) DESC LIMIT 10
 
 SELECT L.lid, L.name
