@@ -6,7 +6,7 @@ SELECT AVG(L.review_scores_cleanliness)
 FROM Listing L, Amenities A, Has_amen H
 WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'TV'
 
-SELECT H.url
+SELECT DISTINCT H.hid
 FROM Host H, Listing L, Calendar C
 WHERE L.lid = C.lid AND L.hid = H.hid AND C.available = 't' AND C.cdate < "20190901" AND C.cdate >= "20190301"
 
