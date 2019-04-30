@@ -12,7 +12,7 @@ WHERE L.lid = C.lid AND L.hid = H.hid AND C.available = 't' AND C.cdate < "20190
 
 SELECT COUNT(*)
 FROM Listing L, Host H1, Host H2
-WHERE (L.hid = H1.hid OR L.hid = H2.hid) AND H1.hid != H2.hid AND H1.name = H2.name
+WHERE (L.hid = H1.hid OR L.hid = H2.hid) AND H1.hid < H2.hid AND H1.name = H2.name
 
 SELECT C.cdate
 FROM Calendar C, Host H, Listing L
