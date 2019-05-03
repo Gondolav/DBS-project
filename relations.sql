@@ -70,6 +70,7 @@ CREATE TABLE Country
 (
   coid INT,
   country VARCHAR(100) NOT NULL,
+  country_code VARCHAR(2) NOT NULL,
   PRIMARY KEY (coid)
 );
 
@@ -113,7 +114,6 @@ CREATE TABLE Listing
   picture_url VARCHAR(100) NOT NULL,
   nid INT NOT NULL,
   ciid INT NOT NULL,
-  country_code CHAR(2) NOT NULL,
   coid INT NOT NULL,
   latitude FLOAT NOT NULL,
   longitude FLOAT NOT NULL,
