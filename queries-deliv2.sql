@@ -22,10 +22,25 @@ SELECT H.hid, H.name
 FROM Host H
 WHERE 1 = (SELECT COUNT(*) FROM Listing L WHERE H.hid = L.hid)
 
-SELECT AVG(L1.price) - AVG(L2.price) AS Difference
-FROM Listing L1, Listing L2, Amenities A1, Has_amen H1
-WHERE L1.lid = H1.lid AND H1.aid = A1.aid AND A1.amenities = 'Wifi' AND L2.lid NOT IN
-(SELECT L.lid FROM Listing L, Amenities A, Has_amen H WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi')
+
+CREATE TABLE TEMP
+(
+	lid INT,
+    price FLOAT,
+    PRIMARY KEY(lid)
+);
+
+INSERT INTO TEMP
+SELECT L.lid, L.price
+FROM Listing L, Amenities A, Has_amen H
+WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi';
+
+SELECT AVG(T1.price) - AVG(L.price) AS DIFFERENCE
+FROM TEMP T1, Listing L
+WHERE L.lid NOT IN (SELECT T.lid FROM TEMP T);
+
+DROP TABLE TEMP
+
 
 
 SELECT AVG(L1.price) - AVG(L2.price) AS BerlinMinusMadrid
