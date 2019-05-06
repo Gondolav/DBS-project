@@ -10,7 +10,7 @@ SELECT DISTINCT H.hid
 FROM Host H, Listing L, Calendar C
 WHERE L.lid = C.lid AND L.hid = H.hid AND C.available = 't' AND C.cdate < "20190901" AND C.cdate >= "20190301"
 
-SELECT COUNT(DISTINCT H1.hid)
+SELECT COUNT(DISTINCT L1.lid)
 FROM Listing L1, Listing L2, Host H1, Host H2
 WHERE L1.hid = H1.hid AND L2.hid = H2.hid AND H1.hid < H2.hid AND H1.name = H2.name
 
