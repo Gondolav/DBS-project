@@ -1,8 +1,8 @@
-SELECT COUNT(DISTINCT L.hid)
-FROM Listing L
+SELECT COUNT(L.hid) AS counts, C.city
+FROM Listing L, City C
+WHERE L.square_feet IS NOT NULL AND L.ciid = C.ciid
 GROUP BY L.ciid
-HAVING L.square_feet = NULL
-ORDER BY L.ciid ASC
+ORDER BY counts ASC
 
 SELECT
 
