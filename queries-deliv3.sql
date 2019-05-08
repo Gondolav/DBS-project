@@ -28,3 +28,15 @@ ORDER BY COUNT(L.lid) DESC LIMIT 3
 FROM Listing L, City C, Room_type R
 WHERE L.rtid = R.rtid AND R.room_type = "Private Room" AND C.ciid = L.ciid AND C.city = "Berlin"
 GROUP BY L.nid
+
+SELECT * FROM
+(
+SELECT L.accommodates, L.lid, L.review_scores_rating, @num := if(@num := @num + 1, 1) as row_num
+FROM Listing L
+WHERE 2 <= (SELECT COUNT(*)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid 
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates, L.review_scores_rating DESC
+) as e
+WHERE row_num <= 5
