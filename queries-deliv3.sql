@@ -18,11 +18,19 @@ WHERE L.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
 GROUP BY L.lid
 ORDER BY AVG(Ca.price) ASC LIMIT 5
 
+7) SELECT N.neighbourhood,
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1),
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 1),
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 2)
+FROM Neighbourhood N, Listing L, Room_type R, City C
+WHERE N.nid = L.nid AND L.rtid = R.rtid AND R.room_type = "Private Room" AND C.ciid = L.ciid AND C.city = "Berlin"
+
 SELECT L.lid
 FROM Listing L, Reviews R
 WHERE L.lid = R.lid
 GROUP BY L.hid
 ORDER BY COUNT(L.lid) DESC LIMIT 3
+
 
 SELECT DISTINCT Co.coid, Co.country
 FROM Country Co, Listing L
