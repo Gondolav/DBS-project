@@ -54,6 +54,6 @@ GROUP BY H.hid
 ORDER BY COUNT(*) DESC LIMIT 10
 
 SELECT L.lid, L.name
-FROM Listing L, City C
-WHERE L.ciid = C.ciid AND C.city = "Barcelona"
+FROM Listing L, City C, Property_type T
+WHERE L.ciid = C.ciid AND C.city = "Barcelona" AND L.ptid = T.ptid AND T.property_type = 'apartment'
 ORDER BY L.review_scores_rating DESC LIMIT 10
