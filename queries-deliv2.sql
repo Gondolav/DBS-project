@@ -14,7 +14,7 @@ SELECT COUNT(DISTINCT L1.lid)
 FROM Listing L1, Listing L2, Host H1, Host H2
 WHERE L1.hid = H1.hid AND L2.hid = H2.hid AND H1.hid < H2.hid AND H1.name = H2.name
 
-SELECT C.cdate
+SELECT DISTINCT C.cdate
 FROM Calendar C, Host H, Listing L
 WHERE L.hid = H.hid AND H.name = "Viajes Eco" AND L.lid = C.lid AND C.available = 't'
 
@@ -22,26 +22,13 @@ SELECT H.hid, H.name
 FROM Host H
 WHERE 1 = (SELECT COUNT(*) FROM Listing L WHERE H.hid = L.hid)
 
-
-CREATE TABLE TEMP
-(
-	lid INT,
-    price FLOAT,
-    PRIMARY KEY(lid)
-);
-
-INSERT INTO TEMP
-SELECT L.lid, L.price
-FROM Listing L, Amenities A, Has_amen H
-WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi';
-
 SELECT AVG(T1.price) - AVG(L.price) AS DIFFERENCE
-FROM TEMP T1, Listing L
-WHERE L.lid NOT IN (SELECT T.lid FROM TEMP T);
-
-DROP TABLE TEMP
-
-
+FROM (SELECT L.lid, L.price
+FROM Listing L, Amenities A, Has_amen H
+WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi') T1, Listing L
+WHERE L.lid NOT IN (SELECT T.lid FROM (SELECT L.lid, L.price
+FROM Listing L, Amenities A, Has_amen H
+WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi') T)
 
 SELECT AVG(L1.price) - AVG(L2.price) AS BerlinMinusMadrid
 FROM Listing L1, Listing L2, City C1, City C2
