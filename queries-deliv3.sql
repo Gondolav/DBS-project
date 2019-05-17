@@ -4,7 +4,9 @@ WHERE L.square_feet IS NOT NULL AND L.ciid = C.ciid
 GROUP BY L.ciid
 ORDER BY counts ASC
 
-2) SELECT
+2) SELECT N.nid, N.neighbourhood
+FROM Neighbourhood N, City C, Listing L
+WHERE L.ciid = C.ciid AND C.city = 'Madrid' AND L.nid = N.nid
 
 3) SELECT H.hid, H.name FROM Host H, Listing L WHERE H.hid = L.hid GROUP BY H.hid ORDER BY COUNT(*) DESC
 
