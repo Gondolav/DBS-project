@@ -11,7 +11,7 @@ FROM (SELECT N.nid, N.neighbourhood, L.review_scores_rating
 	ORDER BY N.nid, L.review_scores_rating) T
 GROUP BY T.nid
 
-3) SELECT H.hid, H.name 
+3) SELECT H.hid, H.name
 FROM Host H, Listing L
 WHERE H.hid = L.hid
 GROUP BY H.hid
@@ -42,13 +42,13 @@ WHERE row_num <= 5
 6) SELECT L.lid
 FROM Listing L, Reviews R
 WHERE L.lid = R.lid
-GROUP BY L.hid
+GROUP BY L.lid, L.hid
 ORDER BY COUNT(L.lid) DESC LIMIT 3
 
-7) SELECT N.neighbourhood,
-(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1),
-(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 1),
-(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 2)
+7) SELECT DISTINCT N.neighbourhood,
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1) AS Amenity1,
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 1) AS Amenity2,
+(SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 2) AS Amenity3
 FROM Neighbourhood N, Listing L, Room_type R, City C
 WHERE N.nid = L.nid AND L.rtid = R.rtid AND R.room_type = "Private Room" AND C.ciid = L.ciid AND C.city = "Berlin"
 
@@ -60,7 +60,7 @@ WHERE L1.hid = H1.hid AND L2.hid = H2.hid AND H1.hid =
 
 9) SELECT C.ciid, C.city FROM Listing L, City C, Reviews R WHERE C.ciid = L.ciid AND L.lid = R.lid AND L.rtid IN (SELECT T.rtid FROM (SELECT L1.rtid, AVG(L1.accommodates) AS average FROM Listing L1 GROUP BY L1.rtid) T WHERE T.average > 3) GROUP BY L.lid ORDER BY COUNT(R.lid) DESC LIMIT 1
 
-10) SELECT DISTINCT N.nid
+10) SELECT DISTINCT N.nid, N.neighbourhood
 FROM Neighbourhood N, City Ci, Listing L
 WHERE (SELECT COUNT(DISTINCT N.nid)
 FROM Calendar Ca, Host H
