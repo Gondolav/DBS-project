@@ -1,7 +1,7 @@
 1) SELECT COUNT(L.hid) AS counts, C.city
-FROM Listing L, City C
-WHERE L.square_feet IS NOT NULL AND L.ciid = C.ciid
-GROUP BY L.ciid
+FROM Listing L, City C, Neighbourhood N
+WHERE L.square_feet IS NOT NULL AND L.nid = N.nid AND N.ciid = C.ciid
+GROUP BY N.ciid
 ORDER BY counts ASC
 
 2) median position for each neighbourhood = SELECT FLOOR(COUNT(T.review_scores_rating) / 2)
@@ -18,8 +18,8 @@ GROUP BY H.hid
 ORDER BY COUNT(*) DESC
 
 4) SELECT L.lid
-FROM Listing L, Calendar Ca, Host H, City Ci, Cancellation_policy CP, Has_verif Hv, Verifications V, Property_type T
-WHERE L.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
+FROM Listing L, Calendar Ca, Host H, City Ci, Cancellation_policy CP, Has_verif Hv, Verifications V, Property_type T, Neighbourhood N
+WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
     AND L.review_scores_location >= 8 AND L.cpid = CP.cpid
     AND CP.cancellation_policy = 'flexible' AND Ca.lid = L.lid AND Ca.available = 't'
     AND Ca.cdate >= "20190301" AND Ca.cdate <= "20190430"
@@ -50,7 +50,7 @@ ORDER BY COUNT(L.lid) DESC LIMIT 3
 (SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 1) AS Amenity2,
 (SELECT A.amenities FROM Listing L2, Has_amen H, Amenities A WHERE L2.nid = N.nid AND L2.lid = H.lid AND A.aid = H.aid GROUP BY H.aid ORDER BY COUNT(H.aid) DESC LIMIT 1 OFFSET 2) AS Amenity3
 FROM Neighbourhood N, Listing L, Room_type R, City C
-WHERE N.nid = L.nid AND L.rtid = R.rtid AND R.room_type = "Private Room" AND C.ciid = L.ciid AND C.city = "Berlin"
+WHERE N.nid = L.nid AND L.rtid = R.rtid AND R.room_type = "Private Room" AND C.ciid = N.ciid AND C.city = "Berlin"
 
 8) SELECT AVG(L1.review_scores_communication) - AVG(L2.review_scores_communication)
 FROM Listing L1, Listing L2, Host H1, Host H2
@@ -58,28 +58,34 @@ WHERE L1.hid = H1.hid AND L2.hid = H2.hid AND H1.hid =
 (SELECT H.hid FROM Host H, Has_verif V WHERE H.hid = V.hid GROUP BY H.hid ORDER BY COUNT(*) DESC LIMIT 1) AND H2.hid =
 (SELECT H.hid FROM Host H, Has_verif V WHERE H.hid = V.hid GROUP BY H.hid ORDER BY COUNT(*) ASC LIMIT 1)
 
-9) SELECT C.ciid, C.city FROM Listing L, City C, Reviews R WHERE C.ciid = L.ciid AND L.lid = R.lid AND L.rtid IN (SELECT T.rtid FROM (SELECT L1.rtid, AVG(L1.accommodates) AS average FROM Listing L1 GROUP BY L1.rtid) T WHERE T.average > 3) GROUP BY L.lid ORDER BY COUNT(R.lid) DESC LIMIT 1
+9) SELECT C.city
+FROM Listing L, City C, Reviews R, Neighbourhood N
+WHERE L.nid = N.nid AND C.ciid = N.ciid AND L.lid = R.lid AND L.rtid IN
+(SELECT T.rtid FROM (SELECT L1.rtid, AVG(L1.accommodates) AS average FROM Listing L1 GROUP BY L1.rtid) T WHERE T.average > 3)
+GROUP BY L.lid
+ORDER BY COUNT(R.lid) DESC LIMIT 1
+
 
 10) SELECT DISTINCT N.nid, N.neighbourhood
 FROM Neighbourhood N, City Ci, Listing L
 WHERE (SELECT COUNT(DISTINCT N.nid)
 FROM Calendar Ca, Host H
-WHERE L.nid = N.nid AND L.ciid = Ci.ciid AND Ci.city = 'Madrid' AND Ca.lid = L.lid AND L.hid = H.hid AND H.since < '20170601' AND Ca.available = 'f' AND Ca.cdate >= '20190101' AND Ca.cdate <= '20191231') >= (SELECT COUNT(DISTINCT N.nid) * 50 / 100
-WHERE L.nid = N.nid AND L.ciid = Ci.ciid AND Ci.city = 'Madrid')
+WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Madrid' AND Ca.lid = L.lid AND L.hid = H.hid AND H.since < '20170601' AND Ca.available = 'f' AND Ca.cdate >= '20190101' AND Ca.cdate <= '20191231') >= (SELECT COUNT(DISTINCT N.nid) * 50 / 100
+WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Madrid')
 
 11) SELECT DISTINCT Co.coid, Co.country
-FROM Country Co, Listing L
+FROM Country Co, Listing L, Neighbourhood N, City C
 WHERE
 (SELECT COUNT(L.lid)
 FROM Calendar Ca
-WHERE Co.coid = L.coid AND Ca.lid = L.lid AND Ca.available = 't' AND Ca.cdate >= '20180101' AND Ca.cdate <= '20181231') >=
+WHERE L.nid = N.nid AND N.ciid = C.ciid AND Co.coid = C.coid AND Ca.lid = L.lid AND Ca.available = 't' AND Ca.cdate >= '20180101' AND Ca.cdate <= '20181231') >=
     (SELECT COUNT(L.lid) * 20 / 100
-    WHERE Co.coid = L.coid)
+    WHERE L.nid = N.nid AND N.ciid = C.ciid AND Co.coid = C.coid)
 
 12) SELECT N.nid, N.neighbourhood
 FROM Neighbourhood N
 WHERE
     (SELECT COUNT(N.nid)
     FROM Listing L, City C, Cancellation_policy CP
-    WHERE L.nid = N.nid AND L.ciid = C.ciid AND C.city = 'Barcelona' AND L.cpid = CP.cpid AND CP.cancellation_policy = 'strict_14_with_grace_period') > (SELECT COUNT(N.nid) * 5 / 100 FROM Listing L, City C
-    WHERE L.nid = N.nid AND L.ciid = C.ciid AND C.city = 'Barcelona')
+    WHERE L.nid = N.nid AND N.ciid = C.ciid AND C.city = 'Barcelona' AND L.cpid = CP.cpid AND CP.cancellation_policy = 'strict_14_with_grace_period') > (SELECT COUNT(N.nid) * 5 / 100 FROM Listing L, City C
+    WHERE L.nid = N.nid AND N.ciid = C.ciid AND C.city = 'Barcelona')

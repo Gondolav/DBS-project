@@ -31,16 +31,16 @@ FROM Listing L, Amenities A, Has_amen H
 WHERE L.lid = H.lid AND H.aid = A.aid AND A.amenities = 'Wifi') T)
 
 SELECT AVG(L1.price) - AVG(L2.price) AS BerlinMinusMadrid
-FROM Listing L1, Listing L2, City C1, City C2
-WHERE L1.beds = 8 AND L2.beds = 8 AND L1.ciid = C1.ciid AND L2.ciid = C2.ciid AND C1.city = "Berlin" AND C2.city = "Madrid"
+FROM Listing L1, Listing L2, City C1, City C2, Neighbourhood N1, Neighbourhood N2
+WHERE L1.beds = 8 AND L2.beds = 8 AND L1.nid = N1.nid AND N1.ciid = C1.ciid AND L2.nid = N2.nid AND N2.ciid = C2.ciid AND C1.city = "Berlin" AND C2.city = "Madrid"
 
 SELECT H.hid, H.name
-FROM Host H, Listing L, Country C
-WHERE H.hid = L.hid AND L.coid = C.coid AND C.country = 'Spain'
+FROM Host H, Listing L, Country Co, Neighbourhood N, City Ci
+WHERE H.hid = L.hid AND L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.coid = Co.coid AND Co.country = 'Spain'
 GROUP BY H.hid
 ORDER BY COUNT(*) DESC LIMIT 10
 
 SELECT L.lid, L.name
-FROM Listing L, City C, Property_type T
-WHERE L.ciid = C.ciid AND C.city = "Barcelona" AND L.ptid = T.ptid AND T.property_type = 'apartment'
+FROM Listing L, City C, Property_type T, Neighbourhood N
+WHERE L.nid = N.nid AND N.ciid = C.ciid AND C.city = "Barcelona" AND L.ptid = T.ptid AND T.property_type = 'apartment'
 ORDER BY L.review_scores_rating DESC LIMIT 10
