@@ -4,11 +4,18 @@ WHERE L.square_feet IS NOT NULL AND L.ciid = C.ciid
 GROUP BY L.ciid
 ORDER BY counts ASC
 
-2) SELECT N.nid, N.neighbourhood
-FROM Neighbourhood N, City C, Listing L
-WHERE L.ciid = C.ciid AND C.city = 'Madrid' AND L.nid = N.nid
+2) median position for each neighbourhood = SELECT FLOOR(COUNT(T.review_scores_rating) / 2)
+FROM (SELECT N.nid, N.neighbourhood, L.review_scores_rating
+	FROM Neighbourhood N, City C, Listing L
+	WHERE L.ciid = C.ciid AND C.city = 'Madrid' AND L.nid = N.nid
+	ORDER BY N.nid, L.review_scores_rating) T
+GROUP BY T.nid
 
-3) SELECT H.hid, H.name FROM Host H, Listing L WHERE H.hid = L.hid GROUP BY H.hid ORDER BY COUNT(*) DESC
+3) SELECT H.hid, H.name 
+FROM Host H, Listing L
+WHERE H.hid = L.hid
+GROUP BY H.hid
+ORDER BY COUNT(*) DESC
 
 4) SELECT L.lid
 FROM Listing L, Calendar Ca, Host H, City Ci, Cancellation_policy CP, Has_verif Hv, Verifications V, Property_type T
