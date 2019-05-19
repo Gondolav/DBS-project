@@ -25,7 +25,9 @@ CREATE TABLE Neighbourhood
 (
   nid INT,
   neighbourhood VARCHAR(200) NOT NULL,
-  PRIMARY KEY (nid)
+  ciid INT NOT NULL,
+  PRIMARY KEY (nid),
+  FOREIGN KEY (ciid) REFERENCES City(ciid)
 );
 
 CREATE TABLE Has_verif
@@ -78,7 +80,9 @@ CREATE TABLE City
 (
   ciid INT,
   city VARCHAR(100) NOT NULL,
-  PRIMARY KEY (ciid)
+  coid INT NOT NULL,
+  PRIMARY KEY (ciid),
+  FOREIGN KEY (coid) REFERENCES Country(coid)
 );
 
 CREATE TABLE Amenities
@@ -113,8 +117,6 @@ CREATE TABLE Listing
   house_rules TEXT,
   picture_url VARCHAR(100) NOT NULL,
   nid INT NOT NULL,
-  ciid INT NOT NULL,
-  coid INT NOT NULL,
   latitude FLOAT NOT NULL,
   longitude FLOAT NOT NULL,
   property_type_id INT NOT NULL,
@@ -149,8 +151,6 @@ CREATE TABLE Listing
   PRIMARY KEY (lid),
   FOREIGN KEY (hid) REFERENCES Host ON DELETE CASCADE,
   FOREIGN KEY (nid) REFERENCES Neighbourhood(nid),
-  FOREIGN KEY (ciid) REFERENCES City(ciid),
-  FOREIGN KEY (coid) REFERENCES Country(coid),
   FOREIGN KEY (property_type_id) REFERENCES Property_type(ptid),
   FOREIGN KEY (room_type_id) REFERENCES Room_type(rtid),
   FOREIGN KEY (bed_type_id) REFERENCES Bed_type(btid),
