@@ -27,17 +27,16 @@ WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
 GROUP BY L.lid
 ORDER BY AVG(Ca.price) ASC LIMIT 5
 
-5) SELECT * FROM
-(
-SELECT L.accommodates, L.lid, L.review_scores_rating, @num := if(@num := @num + 1, 1) as row_num
+5) SELECT L.accommodates, L.lid, L.review_scores_rating, COUNT(T.review_scores_rating) AS rank
 FROM Listing L
-WHERE 2 <= (SELECT COUNT(*)
+LEFT JOIN L AS T ON L.accommodates = T.accommodates AND L.review_scores_rating < T.review_scores_rating
+WHERE 2 <= (SELECT COUNT(A.aid)
 FROM Amenities A, Has_amen Ha
 WHERE Ha.lid = L.lid AND Ha.aid = A.aid
 AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
-ORDER BY L.accommodates, L.review_scores_rating DESC
-) as e
-WHERE row_num <= 5
+GROUP BY L.accommodates, L.review_scores_rating
+HAVING COUNT(T.review_scores_rating) < 5
+ORDER BY L.accommodates DESC, L.review_scores_rating
 
 6) SELECT L.lid
 FROM Listing L, Reviews R
