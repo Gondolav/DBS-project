@@ -67,11 +67,14 @@ ORDER BY COUNT(R.lid) DESC LIMIT 1
 
 
 10) SELECT DISTINCT N.nid, N.neighbourhood
-FROM Neighbourhood N, City Ci, Listing L
-WHERE (SELECT COUNT(DISTINCT N.nid)
-FROM Calendar Ca, Host H
-WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Madrid' AND Ca.lid = L.lid AND L.hid = H.hid AND H.since < '20170601' AND Ca.available = 'f' AND Ca.cdate >= '20190101' AND Ca.cdate <= '20191231') >= (SELECT COUNT(DISTINCT N.nid) * 50 / 100
-WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Madrid')
+FROM Neighbourhood N, City Ci
+WHERE N.ciid = Ci.ciid AND Ci.city = 'Madrid' AND
+(SELECT COUNT(DISTINCT L.lid)
+FROM Calendar Ca, Host H, Listing L
+WHERE L.nid = N.nid AND Ca.lid = L.lid AND L.hid = H.hid AND H.since < '20170601' AND Ca.available = 'f' AND Ca.cdate >= '20190101' AND Ca.cdate <= '20191231') >=
+(SELECT COUNT(DISTINCT L.lid) * 0.5
+FROM City Ci, Listing L
+WHERE L.nid = N.nid)
 
 11) SELECT DISTINCT Co.coid, Co.country
 FROM Country Co, Listing L, Neighbourhood N, City C
