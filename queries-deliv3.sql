@@ -44,7 +44,7 @@ WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
 GROUP BY L.lid
 ORDER BY AVG(Ca.price) ASC LIMIT 5
 
-5) SELECT L.accommodates, L.lid, L.review_scores_rating, COUNT(T.review_scores_rating) AS rank
+5) SELECT L.accommodates, L.lid, L.review_scores_rating
 FROM Listing L
 LEFT JOIN Listing AS T ON L.accommodates = T.accommodates AND L.review_scores_rating < T.review_scores_rating
 WHERE 2 <= (SELECT COUNT(A.aid)
