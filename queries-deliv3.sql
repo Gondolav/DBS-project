@@ -4,12 +4,29 @@ WHERE L.square_feet IS NOT NULL AND L.nid = N.nid AND N.ciid = C.ciid
 GROUP BY N.ciid
 ORDER BY counts ASC
 
-2) median position for each neighbourhood = SELECT FLOOR(COUNT(T.review_scores_rating) / 2)
-FROM (SELECT N.nid, N.neighbourhood, L.review_scores_rating
-	FROM Neighbourhood N, City C, Listing L
-	WHERE L.ciid = C.ciid AND C.city = 'Madrid' AND L.nid = N.nid
-	ORDER BY N.nid, L.review_scores_rating) T
-GROUP BY T.nid
+2) SET @row_number:=0;
+SET @neighbourhood_id:='';
+
+SELECT
+    neighbourhood_id, AVG(b.review_scores_rating) AS median
+FROM
+    (SELECT
+    @row_number:=CASE WHEN @neighbourhood_id = a.nid THEN @row_number + 1 ELSE 1 END AS count_of_group,
+    @neighbourhood_id:=a.nid AS neighbourhood_id,
+    a.nid,
+    a.review_scores_rating,
+    (SELECT COUNT(*) FROM Neighbourhood N, City C, Listing L
+	WHERE L.nid = N.nid AND N.ciid = C.ciid AND C.city = 'Madrid' AND N.nid = a.nid) AS total_of_group
+FROM
+    (SELECT
+        N.nid, L.review_scores_rating
+		FROM Neighbourhood N, City C, Listing L
+		WHERE L.nid = N.nid AND N.ciid = C.ciid AND C.city = 'Madrid'
+    ORDER BY N.nid , L.review_scores_rating) as a) AS b
+WHERE
+    count_of_group BETWEEN total_of_group / 2.0 AND total_of_group / 2.0 + 1
+GROUP BY neighbourhood_id
+ORDER BY AVG(b.review_scores_rating) DESC LIMIT 5
 
 3) SELECT H.hid, H.name
 FROM Host H, Listing L
