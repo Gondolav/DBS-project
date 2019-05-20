@@ -27,16 +27,133 @@ WHERE L.nid = N.nid AND N.ciid = Ci.ciid AND Ci.city = 'Berlin' AND L.beds >= 2
 GROUP BY L.lid
 ORDER BY AVG(Ca.price) ASC LIMIT 5
 
-5) SELECT L.accommodates, L.lid, L.review_scores_rating
+5) (SELECT L.accommodates, L.lid, L.review_scores_rating
 FROM Listing L
-LEFT JOIN Listing AS T ON L.accommodates = T.accommodates AND L.review_scores_rating < T.review_scores_rating
-WHERE 2 <= (SELECT COUNT(A.aid)
+WHERE L.accommodates = 1 AND 2 <= (SELECT COUNT(A.aid)
 FROM Amenities A, Has_amen Ha
 WHERE Ha.lid = L.lid AND Ha.aid = A.aid
 AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
-GROUP BY L.accommodates, L.lid, L.review_scores_rating
-HAVING COUNT(T.review_scores_rating) < 5
-ORDER BY L.accommodates DESC, L.review_scores_rating
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 2 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 3 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 4 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 5 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 6 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 7 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 8 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 9 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 10 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 11 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 12 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 13 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 14 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 15 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
+UNION ALL
+(SELECT L.accommodates, L.lid, L.review_scores_rating
+FROM Listing L
+WHERE L.accommodates = 16 AND 2 <= (SELECT COUNT(A.aid)
+FROM Amenities A, Has_amen Ha
+WHERE Ha.lid = L.lid AND Ha.aid = A.aid
+AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
+ORDER BY L.accommodates DESC, L.review_scores_rating DESC, L.lid ASC LIMIT 5)
 
 6) SELECT L.lid
 FROM Listing L, Reviews R
