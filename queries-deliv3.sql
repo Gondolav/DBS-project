@@ -29,12 +29,12 @@ ORDER BY AVG(Ca.price) ASC LIMIT 5
 
 5) SELECT L.accommodates, L.lid, L.review_scores_rating, COUNT(T.review_scores_rating) AS rank
 FROM Listing L
-LEFT JOIN L AS T ON L.accommodates = T.accommodates AND L.review_scores_rating < T.review_scores_rating
+LEFT JOIN Listing AS T ON L.accommodates = T.accommodates AND L.review_scores_rating < T.review_scores_rating
 WHERE 2 <= (SELECT COUNT(A.aid)
 FROM Amenities A, Has_amen Ha
 WHERE Ha.lid = L.lid AND Ha.aid = A.aid
 AND (A.amenities = "Wifi" OR A.amenities = "Internet" OR A.amenities = "TV" OR A.amenities = "Free street parking"))
-GROUP BY L.accommodates, L.review_scores_rating
+GROUP BY L.accommodates, L.lid, L.review_scores_rating
 HAVING COUNT(T.review_scores_rating) < 5
 ORDER BY L.accommodates DESC, L.review_scores_rating
 
