@@ -35,8 +35,8 @@ CREATE TABLE Has_verif
     vid INT,
     hid INT,
     PRIMARY KEY (vid, hid),
-    FOREIGN KEY (vid) REFERENCES Verifications(vid),
-    FOREIGN KEY (hid) REFERENCES Host(hid)
+    FOREIGN KEY (vid) REFERENCES Verifications(vid) ON DELETE CASCADE,
+    FOREIGN KEY (hid) REFERENCES Host(hid) ON DELETE CASCADE
 );
 
 CREATE TABLE Reviews
@@ -97,8 +97,8 @@ CREATE TABLE Has_amen
     aid INT,
     lid INT,
     PRIMARY KEY (aid, lid),
-    FOREIGN KEY (aid) REFERENCES Amenities(aid),
-    FOREIGN KEY (lid) REFERENCES Listing(lid)
+    FOREIGN KEY (aid) REFERENCES Amenities(aid) ON DELETE CASCADE,
+    FOREIGN KEY (lid) REFERENCES Listing(lid) ON DELETE CASCADE
 );
 
 CREATE TABLE Listing
